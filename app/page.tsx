@@ -5,6 +5,7 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { ProductCarousel } from '@/components/ProductCarousel'
 import { FlashDeals } from '@/components/FlashDeals'
+import CategoryProductsSection from '@/components/CategoryProductsSection'
 
 // Mock data - replace with API calls
 const mockFlashDeals = [
@@ -224,6 +225,9 @@ export default function Home() {
           </div>
           <FlashDeals deals={mockFlashDeals} />
         </div>
+
+        {/* Dynamic Category Products Section - NO PAGE RELOAD */}
+        <CategoryProductsSection />
 
         {/* Electronics */}
         <div className="bg-white p-5 mb-6">
