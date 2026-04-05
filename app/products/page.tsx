@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import ProductCard from '@/components/ProductCard'
@@ -8,6 +9,9 @@ import { FilterSidebar } from '@/components/FilterSidebar'
 import { Spinner } from '@/components/ui/spinner'
 
 export default function ProductsPage() {
+  const searchParams = useSearchParams()
+  const categoryParam = searchParams.get('category')
+  
   const [products, setProducts] = useState([])
   const [filteredProducts, setFilteredProducts] = useState([])
   const [sortBy, setSortBy] = useState('relevance')
@@ -143,10 +147,21 @@ export default function ProductsPage() {
   useEffect(() => {
     setIsLoading(true)
     setTimeout(() => {
-      setProducts(mockProducts)
+      let filtered = mockProducts
+      
+      // Filter by category from URL if present
+      if (categoryParam && categoryParam !== 'all') {
+        const categoryName = categoryParam.charAt(0).toUpperCase() + categoryParam.slice(1)
+        filtered = mockProducts.filter(p => 
+          p.category.toLowerCase() === categoryParam.toLowerCase() ||
+          categoryParam.toLowerCase().includes(p.category.toLowerCase())
+        )
+      }
+      
+      setProducts(filtered)
       setIsLoading(false)
     }, 300)
-  }, [])
+  }, [categoryParam])
 
   useEffect(() => {
     let filtered = [...products]
@@ -225,7 +240,11 @@ export default function ProductsPage() {
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="mb-6">
-            <h1 className="text-3xl font-bold text-foreground">All Products</h1>
+            <h1 className="text-3xl font-bold text-foreground">
+              {categoryParam && categoryParam !== 'all' 
+                ? `${categoryParam.charAt(0).toUpperCase() + categoryParam.slice(1).replace('-', ' & ')} Products`
+                : 'All Products'}
+            </h1>
             <p className="text-muted-foreground text-sm mt-1">
               Showing {filteredProducts.length} products
             </p>
