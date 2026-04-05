@@ -1,0 +1,50 @@
+spring:
+  application:
+    name: ecommerce-api
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ecommerce_db
+    username: ecommerce_user
+    password: ecommerce_password
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        jdbc:
+          batch_size: 20
+    show-sql: false
+
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    default-property-inclusion: non_null
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+cors:
+  allowed-origins: http://localhost:3000,http://localhost:3001
+  allowed-methods: GET,POST,PUT,DELETE,OPTIONS,PATCH
+  allowed-headers: '*'
+  allow-credentials: true
+  max-age: 3600
+
+jwt:
+  secret: your-super-secret-jwt-key-change-this-in-production-with-at-least-32-characters
+  expiration: 86400000
+
+stripe:
+  api-key: sk_test_your_stripe_key_here
+  webhook-secret: whsec_your_webhook_secret_here
+
+logging:
+  level:
+    root: INFO
+    com.ecommerce: DEBUG
